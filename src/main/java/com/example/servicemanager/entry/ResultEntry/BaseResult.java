@@ -35,11 +35,11 @@ public class BaseResult {
         this.mess = mess;
     }
 
-    public Object getObject() {
+    public Object getResult() {
         return result;
     }
 
-    public void setObject(Object object) {
-        this.result = object;
+    public void setResult(Object result) {
+        this.result = result;
     }
 }

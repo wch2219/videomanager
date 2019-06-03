@@ -1,4 +1,4 @@
-package com.example.servicemanager.service.serviceimpl.SqlUtils;
+package com.example.servicemanager.mapp.SqlUtils;
 
 public class VideoSql {
 

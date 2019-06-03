@@ -4,9 +4,11 @@ package com.example.servicemanager.service;
 import com.example.servicemanager.entry.ReponceEnt.LoginRep;
 import com.example.servicemanager.entry.ResultEntry.BaseResult;
 
+import java.util.Map;
+
 public interface UserService {
 
-    BaseResult login(LoginRep loginRep);
+    BaseResult login(Map<String,Object> loginRep);
 
-    BaseResult register(String phone, String password);
+    BaseResult register(Map<String,Object> map);
 }

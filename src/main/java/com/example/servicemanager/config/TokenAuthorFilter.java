@@ -39,6 +39,7 @@ public class TokenAuthorFilter implements Filter {
         rep.setHeader("Access-Control-Allow-Headers", "token,Origin, X-Requested-With, Content-Type, Accept");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
+
         String token = req.getHeader("token");
         //header方式
         BaseResult resultInfo = new BaseResult();
@@ -47,6 +48,8 @@ public class TokenAuthorFilter implements Filter {
         if (method.equals("OPTIONS")) {
             rep.setStatus(HttpServletResponse.SC_OK);
         } else {
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/manager/user/login");
+            System.out.println(requestDispatcher.toString());
             if (null == token || token.isEmpty()) {
                 resultInfo.setCode(Constant.UN_AUTHORIZED);
                 resultInfo.setMess("用户授权认证没有通过!客户端请求参数中无token信息");

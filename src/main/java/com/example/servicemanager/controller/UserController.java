@@ -38,16 +38,16 @@ public class UserController extends BaseController{
     private UserService service;
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public BaseResult login(@RequestBody @Valid LoginRep rep, BindingResult bindingResult){
+    public BaseResult login(@RequestParam Map<String,Object> map){
 
-        if (bindingResult.hasErrors()) {
-            for (ObjectError allError : bindingResult.getAllErrors()) {
+//        if (bindingResult.hasErrors()) {
+//            for (ObjectError allError : bindingResult.getAllErrors()) {
+//
+//                return new BaseResult(Constant.PARAM_ERROR,allError.getDefaultMessage(),null);
+//            }
+//        }
 
-                return new BaseResult(Constant.PARAM_ERROR,allError.getDefaultMessage(),null);
-            }
-        }
-
-        BaseResult user = service.login(rep);
+        BaseResult user = service.login(map);
 
         return user;
     }
@@ -55,16 +55,14 @@ public class UserController extends BaseController{
 
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
-    public BaseResult register(@RequestBody @Valid RegisterReq req, HttpServletRequest request, BindingResult bindingResult){
-        String code = (String) request.getSession().getAttribute(req.getPhone());
-        if (bindingResult.hasErrors()) {
-            return new BaseResult(Constant.PARAM_ERROR,bindingResult.getFieldError().getDefaultMessage(),null);
-        }
+    public BaseResult register(@RequestParam Map<String,Object> map, HttpServletRequest request){
+        String code = (String) request.getSession().getAttribute((String) map.get("phone"));
 
-        if (!req.getSmscode().equals(code)) {
+
+        if (StringUtils.isEmpty((String) map.get("smscode"))||!((String) map.get("smscode")).equals(code)) {
             return new BaseResult(Constant.PARAM_ERROR,"验证码输入错误",code);
         }
-        service.register(req.getPhone(),req.getPassword());
+        service.register(map);
         return new BaseResult(Constant.SUCCESS,"成功",code);
     }
     @PostMapping("/getAuth")
