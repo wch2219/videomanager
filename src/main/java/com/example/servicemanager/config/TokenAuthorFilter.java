@@ -48,13 +48,19 @@ public class TokenAuthorFilter implements Filter {
         if (method.equals("OPTIONS")) {
             rep.setStatus(HttpServletResponse.SC_OK);
         } else {
-            RequestDispatcher requestDispatcher = req.getRequestDispatcher("/manager/user/login");
-            System.out.println(requestDispatcher.toString());
+            String requestURI = req.getRequestURI();
             if (null == token || token.isEmpty()) {
-                resultInfo.setCode(Constant.UN_AUTHORIZED);
-                resultInfo.setMess("用户授权认证没有通过!客户端请求参数中无token信息");
+                if (requestURI.startsWith("/video/manager/user/")) {
+                    resultInfo.setCode(Constant.SUCCESS);
+                    resultInfo.setMess("用户授权认证通过!");
+                    isFilter = true;
+                }else {
+                    resultInfo.setCode(Constant.UN_AUTHORIZED);
+                    resultInfo.setMess("用户授权认证没有通过!客户端请求参数中无token信息");
+                }
+
             } else {
-                if (TokenUtil.volidateToken(token)) {
+                if (TokenUtil.volidateToken(token,req)) {
                     resultInfo.setCode(Constant.SUCCESS);
                     resultInfo.setMess("用户授权认证通过!");
                     isFilter = true;

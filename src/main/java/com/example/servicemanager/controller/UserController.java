@@ -8,6 +8,7 @@ import com.example.servicemanager.utils.Constant;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
+import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -38,7 +39,7 @@ public class UserController extends BaseController{
     private UserService service;
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public BaseResult login(@RequestParam Map<String,Object> map){
+    public BaseResult login(@RequestParam Map<String,Object> map,HttpServletRequest request){
 
 //        if (bindingResult.hasErrors()) {
 //            for (ObjectError allError : bindingResult.getAllErrors()) {
@@ -47,7 +48,7 @@ public class UserController extends BaseController{
 //            }
 //        }
 
-        BaseResult user = service.login(map);
+        BaseResult user = service.login(map,request);
 
         return user;
     }
@@ -62,8 +63,9 @@ public class UserController extends BaseController{
         if (StringUtils.isEmpty((String) map.get("smscode"))||!((String) map.get("smscode")).equals(code)) {
             return new BaseResult(Constant.PARAM_ERROR,"验证码输入错误",code);
         }
-        service.register(map);
-        return new BaseResult(Constant.SUCCESS,"成功",code);
+        BaseResult register = service.register(map);
+        request.getSession().removeAttribute(code);
+        return register;
     }
     @PostMapping("/getAuth")
     public BaseResult getAuthCode(@RequestParam("phone") String phone, HttpServletRequest request){
@@ -78,6 +80,13 @@ public class UserController extends BaseController{
         String randomCode = RandomStringUtils.randomNumeric(6);
         request.getSession().setAttribute(phone,randomCode);
         return new BaseResult(Constant.SUCCESS,"成功",randomCode);
+    }
+    @PostMapping("/userinfo")
+    public BaseResult getUserInfo(@RequestParam(Constant.Fields) String fields, HttpServletRequest request){
+        String token = request.getHeader("token");
+        Object user_id = request.getSession().getAttribute(token);
+        BaseResult userInfo = service.getUserInfo(user_id, fields);
+        return  userInfo;
     }
 
 

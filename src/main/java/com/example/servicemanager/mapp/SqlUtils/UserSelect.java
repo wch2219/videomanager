@@ -1,5 +1,6 @@
 package com.example.servicemanager.mapp.SqlUtils;
 
+import com.example.servicemanager.utils.Constant;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
@@ -8,13 +9,11 @@ public class UserSelect {
 
     public String selectUser(Map<String, Object> map) {
 
-        String phone = (String) map.get("phone");
-        String pass = (String) map.get("password");
-        String fieleds = (String) map.get("fieleds");
+        Object user_id =  map.get(Constant.User_ID);
+        String fieleds = (String) map.get(Constant.Fields);
 
         String sql = "select "+(StringUtils.isEmpty(fieleds)?"*":fieleds)+
-                " from videos.t_user where t_user.user_phone = '"+phone+
-                "' and t_user.user_password ='"+pass+"'";
+                " from t_user where t_user.user_id = "+user_id;
         System.out.println("SQl"+sql);
         return sql;
     }
