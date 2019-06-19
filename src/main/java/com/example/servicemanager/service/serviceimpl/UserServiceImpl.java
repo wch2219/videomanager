@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.example.servicemanager.entry.ResultEntry.BaseResult;
 import com.example.servicemanager.entry.ResultEntry.TUser;
 
+import com.example.servicemanager.mapp.Tokenmapp;
 import com.example.servicemanager.mapp.UserMapp;
 import com.example.servicemanager.service.UserService;
 import com.example.servicemanager.utils.Constant;
@@ -15,6 +16,8 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -24,7 +27,8 @@ import static com.example.servicemanager.utils.Constant.*;
 public class UserServiceImpl implements UserService {
     @Resource
     private UserMapp userMapp;
-
+    @Resource
+    private  Tokenmapp mTokenmapp;
     @Override
     public BaseResult login(Map<String, Object> loginRep, HttpServletRequest request) {
         String phone = (String) loginRep.get("phone");
@@ -53,6 +57,14 @@ public class UserServiceImpl implements UserService {
 //        tUser = userMapp.login(phone,EncryptUtil.encrypt(decrypt));
         String token = UUID.randomUUID().toString();
 
+//        long currTime = System.currentTimeMillis()+30*60*1000;
+        long currTime = System.currentTimeMillis()+10*1000;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        String expir_time = format.format(new Date(currTime));
+
+
+        mTokenmapp.saveToken(tUser.getUserId(),token,expir_time);
         HttpSession session = request.getSession();
         session.setMaxInactiveInterval(Constant.TokenTime);
         session.setAttribute(token, tUser.getUserId());

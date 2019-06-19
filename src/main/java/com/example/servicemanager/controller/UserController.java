@@ -89,6 +89,14 @@ public class UserController extends BaseController{
         return  userInfo;
     }
 
+    @PostMapping("/attentuser")
+    public BaseResult attent(HttpServletRequest request){
+        String token = request.getHeader("token");
+
+
+        return  null;
+    }
+
 
     @PostMapping("/upload")
     public BaseResult upPic(@RequestParam("files")MultipartFile[] files){

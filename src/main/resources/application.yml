@@ -64,7 +64,7 @@ server:
   servlet:
     context-path: /video
     session:
-      timeout: 10s
+      timeout: 100s
 
   pagehelper:
     helper-dialect: mysql

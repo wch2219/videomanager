@@ -60,7 +60,7 @@ public class TokenAuthorFilter implements Filter {
                 }
 
             } else {
-                if (TokenUtil.volidateToken(token,req)) {
+                if (new TokenUtil().volidateToken(token,req)) {
                     resultInfo.setCode(Constant.SUCCESS);
                     resultInfo.setMess("用户授权认证通过!");
                     isFilter = true;

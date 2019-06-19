@@ -21,4 +21,5 @@ public interface UserMapp {
     @Insert("insert into t_user (user_phone,user_password) values (#{phone},#{password})")
 //    @Options(useGeneratedKeys = true, keyProperty = "t_user.user_id")
     int register(String phone,String password);
+
 }

@@ -5,7 +5,7 @@ import java.sql.Date;
 
 public class TUser {
 
-  private long userId;
+  private int userId;
   private String userRealname;
   private String userNickname;
   private String userPhone;
@@ -17,11 +17,11 @@ public class TUser {
   private String token;
 
 
-  public long getUserId() {
+  public int getUserId() {
     return userId;
   }
 
-  public void setUserId(long userId) {
+  public void setUserId(int userId) {
     this.userId = userId;
   }
 
