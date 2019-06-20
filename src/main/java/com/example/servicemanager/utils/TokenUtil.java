@@ -2,9 +2,7 @@ package com.example.servicemanager.utils;
 
 import com.example.servicemanager.entry.ResultEntry.Tokendb;
 import com.example.servicemanager.mapp.Tokenmapp;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -13,12 +11,11 @@ import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
-
+@Component
 public class TokenUtil {
     @Resource
     private  Tokenmapp mTokenmapp;
-
+    public static TokenUtil mTokenUtil;
     public  boolean volidateToken(String token, HttpServletRequest req) {
         HttpSession session = req.getSession(false);
         Tokendb userId = mTokenmapp.getUserId(token);
@@ -48,5 +45,9 @@ public class TokenUtil {
             return true;
         }
 
+    }
+    @PostConstruct
+    public void init(){
+        mTokenUtil = this;
     }
 }
